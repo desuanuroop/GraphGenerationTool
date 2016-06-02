@@ -8,9 +8,8 @@
 		    google.charts.load('current', {'packages':['corechart']});
 			//Read Data from file.
 			var data;
-			function handleFileSelect(evt) {
-				console.log("handleFileSelect");
-				var file = evt.target.files[0];
+			function handleFileSelect() {
+				var file = $("#csv-file")[0].files[0];
 			    Papa.parse(file, {
 			      delimiter:",",
 			      header: true,
@@ -23,18 +22,21 @@
 			    return handleFileSelect;
 			}
 		
-		    	/*setInterval((function() {
-		    		function loop() {
-		    			console.log("Hello");
-		    			$("#csv-file").change(handleFileSelect);
-		    		};
-		    		loop();
-		    		return loop;
-		    	}()),1000);*/
-		    $(document).ready(function(){
+	    	setInterval((function() {
+	    		function loop() {
+	    			if ($('#csv-file').val()) {
+ 					   handleFileSelect();
+					}else {
+	    				console.log("No file selected");
+	    			}
+	    		};
+	    		loop();
+	    		return loop;
+	    	}()),1000);
+
+		    /*$(document).ready(function(){
 			    $("#csv-file").change(handleFileSelect);
-			    //handleFileSelect($("#csv-file"));
-			});
+			});*/
 
 		  	function demo(dataI) {
 		  	  console.log("Demo");
@@ -60,13 +62,10 @@
 		       	for(var i=0;i<dataI.data.length;i++)
 				{
 					if ($('#CheckBox1').is(':checked') && $('#2CheckBoX').is(':checked')) {
-						alert("Both checkbox checked");
       					data.addRows([[dataI.data[i].label, dataI.data[i].y, dataI.data[i].x]]);
       				} else if($("#CheckBox1").is(':checked')) {
-      					alert("1st checkbox is checked");
       					data.addRows([[dataI.data[i].label, dataI.data[i].y]]);
       				}else {
-      					alert("2nd checkbox is checked");
       					data.addRows([[dataI.data[i].label, dataI.data[i].x]]);
       				}
       				// /data.addRows([[dataI.data[i].label, dataI.data[i].y, dataI.data[i].x]]);
@@ -137,8 +136,9 @@
       			</div>
       			<div class="col-md-7 text-white">
 					<h1 align="center" style="margin-top:100px;">Graph Generation Tool.</h1>
-					<input type="file" id="csv-file" name="files" class="btn btn-lg btn-warning" style="margin-top:50px	"/>
-					<input type="checkbox" name="demo" id="CheckBox1"/> Y
+					<input type="file" id="csv-file" name="files" class="btn btn-lg btn-warning" style="margin-top:50px"/>
+					<button class="btn btn-lg btn-primary button" onclick="handleFileSelect()">Generate</button>
+					<input type="checkbox" name="demo" id="CheckBox1" checked/> Y
 					<input type="checkbox" name="demo2" id="2CheckBoX"/> X
 				</div>
 				<div id="chart_div" class="col-md-12"></div>
